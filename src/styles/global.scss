@@ -1,12 +1,27 @@
+@font-face {  
+  font-family: 'Proxima Nova';  
+  src: url('@assets/fonts/proximanova_regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}  
+
+@font-face {  
+  font-family: 'Proxima Nova';  
+  src: url('@assets/fonts/proximanova_bold.woff2') format('woff2');
+  font-weight: bold; 
+  font-style: normal;  
+}  
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+html {
+  font-size: 62.5%;
 }
+
 
 button {
   cursor: pointer;
@@ -14,8 +29,7 @@ button {
 
 .container {
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
+  max-width: 112rem;
+  margin: 6rem auto;
 }
 
