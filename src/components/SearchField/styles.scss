@@ -12,13 +12,15 @@
     font-family: "Proxima Nova";
     color: $font-primary;
     outline: none;
+
+    &:focus {
+      border-color: $bluebarry-dark;
+    }
+  
   }
   
 
-  &:focus {
-    border-color: $bluebarry-dark;
-  }
-
+ 
   &__icon {
     z-index: 10;
     position: absolute;

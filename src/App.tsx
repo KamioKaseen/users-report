@@ -1,35 +1,62 @@
-import React from 'react';  
-import { SearchField, UserCard, UserCardSkeleton } from "@components";  
+import React, { useState } from 'react';  
 import './App.scss';  
+import { SearchField, UserCard, UserCardSkeleton, UserModal } from "@components";  
 import useFetchUsers from './api';
 
+interface User {
+  name: string;
+  phone: string;
+  email: string;
+  hireDate: string;
+  position: string;
+  department: string;
+}
+
 const App: React.FC = () => {  
-  const { data: users, loading, error } = useFetchUsers();
+  const { data: apiUsers, loading, error } = useFetchUsers()
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  // Меняю название полей
+  const users = apiUsers.map(user => ({
+    ...user,
+    hireDate: user.hire_date,
+    position: user.position_name,
+  }));
 
   return (  
     <div className="container">  
-      <SearchField />  
+      <SearchField />
 
       <main className="users-container">  
-        {!loading && (  
+        {loading && (  
           <>  
             {[...Array(9)].map((_, index) => (  
               <UserCardSkeleton key={index} />  
             ))}  
           </>  
         )}  
-        {error && <p>Error: {error}</p>}  
-        {users.length > 0 ? (  
+
+        {users.length > 0 && (  
           users.map((user) => (  
             <UserCard   
               key={user.email}
               {...user}   
+              onSelect={(userData) => setSelectedUser(userData)}
             />  
           ))  
-        ) : (  
-          <p>No users found</p>  
-        )}  
+        )}
+
+        {error && <p>Ошибка: {error}</p>}  
       </main>  
+
+      {/* Если данные юзера подтянулись через клик по карточкe, то отображаем модальное окно */}
+      {selectedUser && (
+        <UserModal 
+          isOpen={!!selectedUser}
+          onClose={() => setSelectedUser(null)}
+          {...selectedUser}
+        />
+      )}
     </div>  
   );  
 };  

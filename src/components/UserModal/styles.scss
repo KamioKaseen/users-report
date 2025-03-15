@@ -1,0 +1,67 @@
+.backdrop {  
+  z-index: 100; 
+  position: fixed;
+  display: flex;  
+  justify-content: center;  
+  align-items: center;    
+  top: 0;  
+  left: 0;  
+  right: 0;  
+  bottom: 0;  
+  background-color: rgba(202, 204, 216, 0.4);  
+}  
+
+.modal {  
+  position: relative; 
+  display: flex;
+  flex-direction: column;
+  width: fit-content; 
+  max-width: 50rem;
+  padding: 2.4rem 2.4rem 5.6rem 2.4rem;
+  margin: 0 2rem;
+  gap: 4rem;
+  border-radius: 1.6rem;
+  background-color: $primary; 
+  box-shadow: $box-shadow;  
+  font-family: "Proxima Nova";
+
+  &__user-name {
+    font-size: 2.4rem;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 35% 55%;
+    height: fit-content;
+    gap: 10%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;  
+  }
+
+  &__close {
+    position: absolute;
+    top: 2.9rem;
+    right: 2.4rem;
+  }
+
+  &--font-black {
+    color: $font-primary;
+    font-size: 1.8rem;
+  }
+
+  &--font-gray {
+    color: $font-secondary;
+    font-size: 1.6rem;
+    line-height: 1.8rem;
+  }
+
+  &--mt {
+    margin-top: 1.2rem;
+  }
+}  
