@@ -1,0 +1,30 @@
+.search-field {
+  position: relative;
+  width: 100%;
+
+  &__input {
+    z-index: 1;
+    width: 100%;
+    border: .1rem $bluebarry solid;
+    border-radius: 2.4rem;
+    padding: 1.2rem 5rem 1.2rem 2.6rem;
+    font-size: 1.8rem;
+    font-family: "Proxima Nova";
+    color: $font-primary;
+    outline: none;
+  }
+  
+
+  &:focus {
+    border-color: $bluebarry-dark;
+  }
+
+  &__icon {
+    z-index: 10;
+    position: absolute;
+    top: 50%;
+    right: 2.6rem;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+}

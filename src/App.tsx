@@ -1,9 +1,9 @@
-import { Button } from '@components'
+import { SearchField } from "@components";
 
 export default function App() {
   return (
     <div className="container">
-      <Button></Button>
+      <SearchField />
     </div>
   )
 }
