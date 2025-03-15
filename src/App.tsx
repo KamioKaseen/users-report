@@ -1,23 +1,37 @@
-import { SearchField, UserCard } from "@components";
-import './App.scss';
+import React from 'react';  
+import { SearchField, UserCard, UserCardSkeleton } from "@components";  
+import './App.scss';  
+import useFetchUsers from './api';
 
-export default function App() {
-  return (
-    <div className="container">
-      <SearchField />
+const App: React.FC = () => {  
+  const { data: users, loading, error } = useFetchUsers();
 
-      <main className="users-container">
-        <UserCard />
-        <UserCard />
-        <UserCard />
-        <UserCard />
-        <UserCard />
-        <UserCard />
-        <UserCard />
-        <UserCard />
-      </main>
-    </div>
-  )
-}
+  return (  
+    <div className="container">  
+      <SearchField />  
 
+      <main className="users-container">  
+        {!loading && (  
+          <>  
+            {[...Array(9)].map((_, index) => (  
+              <UserCardSkeleton key={index} />  
+            ))}  
+          </>  
+        )}  
+        {error && <p>Error: {error}</p>}  
+        {users.length > 0 ? (  
+          users.map((user) => (  
+            <UserCard   
+              key={user.email}
+              {...user}   
+            />  
+          ))  
+        ) : (  
+          <p>No users found</p>  
+        )}  
+      </main>  
+    </div>  
+  );  
+};  
 
+export default App;  
