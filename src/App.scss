@@ -19,4 +19,11 @@
   @media (max-width: 576px) {
     grid-template-columns: repeat(1, 1fr);
   }
+
+  &__error {
+    width: 100%;
+    text-align: center;
+    font-size: 2rem;
+    font-family: 'Proxima Nova';  
+  }
 }

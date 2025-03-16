@@ -8,9 +8,13 @@ interface User {
   name: string;  
   phone: string;  
   position_name: string;  
-}  
+}
 
-const useFetchUsers = () => {  
+const URL = import.meta.env.VITE_API_BASE_URL;
+
+// Хотел реализовать что-то по типу хуков TanStack Query
+// чтобы можно было получить состояния запросов
+const useFetchUsers = (nameQuery?: string) => {  
   const [data, setData] = useState<User[]>([]);  
   const [loading, setLoading] = useState<boolean>(true);  
   const [error, setError] = useState<string | null>(null);  
@@ -19,9 +23,13 @@ const useFetchUsers = () => {
     const fetchUsers = async () => {  
       setLoading(true);  
       setError(null);  
-      
+
       try {  
-        const response = await fetch('http://[::1]:3000');  
+        const url = nameQuery   
+          ? `${URL}?term=${encodeURIComponent(nameQuery)}`  
+          : `${URL}`;
+
+        const response = await fetch(url);  
 
         if (!response.ok) {  
           throw new Error(`HTTP error! status: ${response.status}`);  
@@ -30,16 +38,16 @@ const useFetchUsers = () => {
         const users: User[] = await response.json();  
         setData(users);  
       } catch (err) {  
-        setError((err as Error).message);
+        setError((err as Error).message);  
       } finally {  
         setLoading(false);  
       }  
     };  
 
     fetchUsers();  
-  }, []);  
+  }, [nameQuery]);
 
-  return { data, loading, error };
+  return { data, loading, error };  
 };  
 
 export default useFetchUsers;  
