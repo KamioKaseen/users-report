@@ -1,4 +1,4 @@
-import { useState } from 'react';  
+import { useEffect, useState } from 'react';  
 import './App.scss';  
 import { SearchField, UserCard, UserCardSkeleton, UserModal } from "@components";  
 import useFetchUsers from './api/api';
@@ -14,6 +14,7 @@ interface User {
 }
 
 const App: React.FC = () => {  
+  const [usersList, setUsersList] = useState<User[]>([]);
   const [targetUser, setTargetUser] = useState<string>('');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
@@ -22,12 +23,18 @@ const App: React.FC = () => {
 
   const { data: apiUsers, loading, error } = useFetchUsers(debouncedUser);
 
-  // Преобразуем в CamelCase
-  const users = apiUsers.map(user => ({
-    ...user,
-    hireDate: user.hire_date,
-    position: user.position_name,
-  }));
+  // Для автоматического обновления списка пользователей
+  useEffect(() => {
+    // Преобразуем в CamelCase
+    const users = apiUsers.map(user => ({
+      ...user,
+      hireDate: user.hire_date,
+      position: user.position_name,
+    }));
+
+    // Добавляем в состояние
+    setUsersList(users);
+  }, [apiUsers])
 
   return (  
     <div className="container">  
@@ -42,8 +49,8 @@ const App: React.FC = () => {
             </>
           )}
 
-          {!loading && users.length > 0 && (
-            users.map((user) => (
+          {!loading && usersList.length > 0 && (
+            usersList.map((user) => (
               <UserCard
                 key={user.email}
                 {...user}
@@ -55,7 +62,7 @@ const App: React.FC = () => {
 
         {error && <p className='users-container__error'>Ошибка: {error}</p>}
 
-        {!error && !loading && users.length === 0 && (
+        {!error && !loading && usersList.length === 0 && (
           <p className='users-container__error'>Пользователь не найден</p>
         )}
       </main>
