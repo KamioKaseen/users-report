@@ -7,6 +7,12 @@
   border-radius: 1.6rem;
   box-shadow: $box-shadow;
   font-family: "Proxima Nova";
+  transition: transform .3s ease;
+
+  &:hover {
+    transform: scale(1.03);
+    cursor: pointer;
+  }
 
   &__title {
     font-size: 2.4rem;
