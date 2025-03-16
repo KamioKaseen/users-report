@@ -1,7 +1,8 @@
-import React, { useState } from 'react';  
+import { useState } from 'react';  
 import './App.scss';  
 import { SearchField, UserCard, UserCardSkeleton, UserModal } from "@components";  
-import useFetchUsers from './api';
+import useFetchUsers from './api/api';
+import { useDebounce } from './hooks/useDebounce';
 
 interface User {
   name: string;
@@ -13,10 +14,15 @@ interface User {
 }
 
 const App: React.FC = () => {  
-  const { data: apiUsers, loading, error } = useFetchUsers()
+  const [targetUser, setTargetUser] = useState<string>('');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  // Меняю название полей
+  // Дебаунс для того, чтобы фильтрация срабатывала не на каждый символ
+  const debouncedUser = useDebounce(targetUser, 500);
+
+  const { data: apiUsers, loading, error } = useFetchUsers(debouncedUser);
+
+  // Преобразуем в CamelCase
   const users = apiUsers.map(user => ({
     ...user,
     hireDate: user.hire_date,
@@ -25,33 +31,37 @@ const App: React.FC = () => {
 
   return (  
     <div className="container">  
-      <SearchField />
+      <SearchField setTargetUser={setTargetUser} />
+      <main>
+        <div className="users-container">  
+          {loading && (
+            <>
+              {[...Array(9)].map((_, index) => (
+                <UserCardSkeleton key={index} />
+              ))}
+            </>
+          )}
 
-      <main className="users-container">  
-        {loading && (  
-          <>  
-            {[...Array(9)].map((_, index) => (  
-              <UserCardSkeleton key={index} />  
-            ))}  
-          </>  
-        )}  
+          {!loading && users.length > 0 && (
+            users.map((user) => (
+              <UserCard
+                key={user.email}
+                {...user}
+                onSelect={(userData) => setSelectedUser(userData)}
+              />
+            ))
+          )}
+        </div>
 
-        {users.length > 0 && (  
-          users.map((user) => (  
-            <UserCard   
-              key={user.email}
-              {...user}   
-              onSelect={(userData) => setSelectedUser(userData)}
-            />  
-          ))  
+        {error && <p className='users-container__error'>Ошибка: {error}</p>}
+
+        {!error && !loading && users.length === 0 && (
+          <p className='users-container__error'>Пользователь не найден</p>
         )}
-
-        {error && <p>Ошибка: {error}</p>}  
-      </main>  
-
-      {/* Если данные юзера подтянулись через клик по карточкe, то отображаем модальное окно */}
+      </main>
+    
       {selectedUser && (
-        <UserModal 
+        <UserModal
           isOpen={!!selectedUser}
           onClose={() => setSelectedUser(null)}
           {...selectedUser}

@@ -36,8 +36,8 @@ export default function UserModal({
     };  
   }, [isOpen]);  
 
-  if (!isOpen) return null;  
- 
+  if (!isOpen) return null;
+
   return ReactDOM.createPortal(  
     <div className="backdrop" onClick={onClose}>  
       <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -79,7 +79,7 @@ export default function UserModal({
         
         <button className="modal__close" onClick={onClose}>
           <CloseIcon width={20} height={20} />
-        </button>
+        </button>  
       </div>  
     </div>,  
     document.getElementById('portal-root')!  
